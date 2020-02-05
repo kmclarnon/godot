@@ -666,6 +666,40 @@ FindReplaceBar::FindReplaceBar() {
 	hide_button->set_v_size_flags(SIZE_SHRINK_CENTER);
 }
 
+/*** Modal Text Edit Control ***/
+
+void ModalTextEdit::_vim_to_default() {
+    WARN_PRINT("Switching from vim mode to default mode")
+}
+
+void ModalTextEdit::_default_to_vim() {
+    WARN_PRINT("Switching from default mode to vim mode");
+}
+
+ModalTextEdit::Mode ModalTextEdit::get_mode() {
+    return static_cast<Mode>(mode);
+}
+
+void ModalTextEdit::set_mode(Mode mode) {
+    Mode cur = get_mode();
+    if (mode == cur) {
+        return;
+    }
+
+    switch (mode) {
+        case DEFAULT:
+            _vim_to_default();
+            break;
+        case VIM:
+            _default_to_vim();
+            break;
+    }
+}
+
+ModalTextEdit::ModalTextEdit() {
+
+}
+
 /*** CODE EDITOR ****/
 
 // This function should be used to handle shortcuts that could otherwise
@@ -1660,6 +1694,18 @@ void CodeTextEditor::update_toggle_scripts_button() {
 	toggle_scripts_button->set_tooltip(TTR("Toggle Scripts Panel") + " (" + ED_GET_SHORTCUT("script_editor/toggle_scripts_panel")->get_as_text() + ")");
 }
 
+void CodeTextEditor::toggle_vim_mode() {
+    ModalTextEdit::Mode mode = text_editor->get_mode();
+    switch(mode) {
+        case ModalTextEdit::DEFAULT:
+            text_editor->set_mode(ModalTextEdit::VIM);
+            break;
+        case ModalTextEdit::VIM:
+            text_editor->set_mode(ModalTextEdit::DEFAULT);
+            break;
+    }
+}
+
 CodeTextEditor::CodeTextEditor() {
 
 	code_complete_func = NULL;
@@ -1667,9 +1713,10 @@ CodeTextEditor::CodeTextEditor() {
 	ED_SHORTCUT("script_editor/zoom_out", TTR("Zoom Out"), KEY_MASK_CMD | KEY_MINUS);
 	ED_SHORTCUT("script_editor/reset_zoom", TTR("Reset Zoom"), KEY_MASK_CMD | KEY_0);
 
-	text_editor = memnew(TextEdit);
+	text_editor = memnew(ModalTextEdit);
 	add_child(text_editor);
 	text_editor->set_v_size_flags(SIZE_EXPAND_FILL);
+	text_editor->set_mode(ModalTextEdit::Mode::DEFAULT);
 
 	// Added second so it opens at the bottom, so it won't shift the entire text editor when opening.
 	find_replace_bar = memnew(FindReplaceBar);

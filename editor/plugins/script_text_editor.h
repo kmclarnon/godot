@@ -233,6 +233,7 @@ public:
 	static void register_editor();
 
 	virtual void validate();
+	void toggle_vim_mode();
 
 	ScriptTextEditor();
 	~ScriptTextEditor();

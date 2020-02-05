@@ -135,13 +135,35 @@ public:
 	FindReplaceBar();
 };
 
+class ModalTextEdit : public TextEdit {
+public:
+
+    GDCLASS(ModalTextEdit, TextEdit);
+
+    int mode;
+
+    void _default_to_vim();
+    void _vim_to_default();
+
+public:
+    enum Mode {
+        DEFAULT,
+        VIM
+    };
+
+    Mode get_mode();
+    void set_mode(Mode mode);
+
+    ModalTextEdit();
+};
+
 typedef void (*CodeTextEditorCodeCompleteFunc)(void *p_ud, const String &p_code, List<ScriptCodeCompletionOption> *r_options, bool &r_forced);
 
 class CodeTextEditor : public VBoxContainer {
 
 	GDCLASS(CodeTextEditor, VBoxContainer);
 
-	TextEdit *text_editor;
+	ModalTextEdit *text_editor;
 	FindReplaceBar *find_replace_bar;
 	HBoxContainer *status_bar;
 
@@ -257,6 +279,7 @@ public:
 
 	void show_toggle_scripts_button();
 	void update_toggle_scripts_button();
+	void toggle_vim_mode();
 
 	CodeTextEditor();
 };

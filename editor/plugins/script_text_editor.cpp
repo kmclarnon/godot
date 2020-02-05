@@ -2024,3 +2024,7 @@ void ScriptTextEditor::register_editor() {
 void ScriptTextEditor::validate() {
 	this->code_editor->validate_script();
 }
+
+void ScriptTextEditor::toggle_vim_mode() {
+    this->code_editor->toggle_vim_mode();
+}

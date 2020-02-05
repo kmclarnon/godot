@@ -1149,6 +1149,14 @@ void ScriptEditor::_menu_option(int p_option) {
 			} else {
 				toggle_scripts_panel();
 			}
+		} break;
+		case TOGGLE_VIM_MODE: {
+		    if (current) {
+		        ScriptTextEditor *editor = Object::cast_to<ScriptTextEditor>(current);
+		        if (editor) {
+		            editor->toggle_vim_mode();
+		        }
+		    }
 		}
 	}
 
@@ -3332,6 +3340,9 @@ ScriptEditor::ScriptEditor(EditorNode *p_editor) {
 
 	file_menu->get_popup()->add_separator();
 	file_menu->get_popup()->add_shortcut(ED_SHORTCUT("script_editor/toggle_scripts_panel", TTR("Toggle Scripts Panel"), KEY_MASK_CMD | KEY_BACKSLASH), TOGGLE_SCRIPTS_PANEL);
+
+    file_menu->get_popup()->add_separator();
+    file_menu->get_popup()->add_shortcut(ED_SHORTCUT("script_editor/toggle_vim_mode", TTR("Toggle Vim Mode")), TOGGLE_VIM_MODE);
 	file_menu->get_popup()->connect("id_pressed", this, "_menu_option");
 
 	script_search_menu = memnew(MenuButton);
